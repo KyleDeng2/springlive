@@ -20,4 +20,13 @@ public class HomeController {
         return user;
     }
 
+    @GetMapping("/user/{id}/{username}")
+    public User userByPathVariable(@PathVariable String id, @PathVariable("username") String name) {
+        User user = new User();
+        user.setId(id);
+        user.setName(name);
+        user.setEmail("info@gmail.com");
+        return user;
+    }
+    
 }
