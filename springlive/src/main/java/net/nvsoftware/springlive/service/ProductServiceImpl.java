@@ -26,7 +26,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(String id) {
-        return productList.stream().filter(product -> product.getProductId().equals(id)).findFirst().get();
+        return productList.stream().filter(product -> product.getProductId().equals(id))
+                .findFirst()
+                //.orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
 
     @Override
