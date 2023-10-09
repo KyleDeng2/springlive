@@ -1,5 +1,6 @@
 package net.nvsoftware.springlive.service;
 
+import net.nvsoftware.springlive.error.ProductNotFoundException;
 import net.nvsoftware.springlive.model.Product;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
         return productList.stream().filter(product -> product.getProductId().equals(id))
                 .findFirst()
                 //.orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + id));
     }
 
     @Override
