@@ -1,11 +1,13 @@
-package net.nvsoftware.springlive.model;
+package net.nvsoftware.springlive.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@JsonIgnoreProperties({"title", "description"})
-public class Product {
-
+@Entity
+@Table(name="product_tb")
+public class ProductEntity {
+    @Id
     private String productId;
     private String title;
     private String description;
@@ -14,8 +16,8 @@ public class Product {
         return productId;
     }
 
-    public void setProductId(String id) {
-        this.productId = id;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getTitle() {
