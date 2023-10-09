@@ -28,5 +28,15 @@ public class HomeController {
         user.setEmail("info@gmail.com");
         return user;
     }
-    
+
+    @GetMapping("/userparams")
+        public User userByRequestParams(@RequestParam String id,
+                                        @RequestParam("username") String name,
+                                        @RequestParam(required = false, defaultValue = "info@gmail.com") String email) {
+            User user = new User();
+            user.setId(id);
+            user.setName(name);
+            user.setEmail("info@gmail.com");
+            return user;
+        }
 }
