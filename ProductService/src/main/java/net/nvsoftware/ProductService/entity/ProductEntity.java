@@ -17,4 +17,5 @@ public class ProductEntity {
     private String name;
     private long price;
     private long quantity;
+
 }
