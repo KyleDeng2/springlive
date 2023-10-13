@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name="PAYMENT-SERVICE/payment")
-@CircuitBreaker(name="feignCall", fallbackMethod = "feignCallPaymentFallback")
+@CircuitBreaker(name = "feignCall", fallbackMethod = "feignCallPaymentFallback")
 public interface PaymentServiceFeignClient {
     @PostMapping("/doPayment")
     public ResponseEntity<Long> doPayment(@RequestBody PaymentRequest paymentRequest);
 
     default void feignCallPaymentFallback(Exception e) {
+
         throw new RuntimeException("PAYMENT-SERVICE is down");
     }
 
