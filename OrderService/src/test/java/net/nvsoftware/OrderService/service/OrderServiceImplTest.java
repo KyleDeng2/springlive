@@ -2,14 +2,20 @@ package net.nvsoftware.OrderService.service;
 
 import net.nvsoftware.OrderService.client.PaymentServiceFeignClient;
 import net.nvsoftware.OrderService.client.ProductServiceFeignClient;
+import net.nvsoftware.OrderService.entity.OrderEntity;
+import net.nvsoftware.OrderService.model.OrderResponse;
 import net.nvsoftware.OrderService.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.Instant;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +38,17 @@ class OrderServiceImplTest {
     @Test
     void testWhenGetOrderDetailByIdSuccess() {
         // Mock
-
+        OrderEntity orderEntity = getMockOrderEntity();
+        Mockito.when(orderRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(orderEntity));
+        Mockito.when(restTemplate.getForObject(
+                "http://PRODUCT-SERVICE/product/" + orderEntity.getProductId(),
+                OrderResponse.ProductResponse.class
+        )).thenReturn(getMockProductResponse());
+        Mockito.when(restTemplate.getForObject(
+                "http://PAYMENT-SERVICE/payment" + orderEntity.getId(),
+                OrderResponse.PaymentResponse.class
+        )) .thenReturn(getMockPaymentResponse());
         // Actual Call
         orderService.getOrderDetailById(1);
 
@@ -40,6 +56,36 @@ class OrderServiceImplTest {
 
         //Assert Result
 
+    }
+    // Mock Part: Add Mock Data
+    private OrderResponse.PaymentResponse getMockPaymentResponse() {
+        return OrderResponse.PaymentResponse.builder()
+                .orderId(7)
+                .id(1)
+                .paymentDate(Instant.now())
+                .paymentMode("VISA")
+                .paymentStatus("SUCCESS")
+                .totalAmount(2999)
+                .build();
+    }
 
+    private OrderResponse.ProductResponse getMockProductResponse() {
+        return OrderResponse.ProductResponse.builder()
+                .id(2)
+                .name("IPhone")
+                .quantity(2)
+                .price(1299)
+                .build();
+    }
+
+    private OrderEntity getMockOrderEntity() {
+        return OrderEntity.builder()
+                .id(7)
+                .productId(2)
+                .quantity(2)
+                .totalAmount(2999)
+                .orderDate(Instant.now())
+                .orderStatus("PLACED")
+                .build();
     }
 }
