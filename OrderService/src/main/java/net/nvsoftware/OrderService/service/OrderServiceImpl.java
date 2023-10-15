@@ -9,6 +9,7 @@ import net.nvsoftware.OrderService.model.OrderResponse;
 import net.nvsoftware.OrderService.model.PaymentRequest;
 import net.nvsoftware.OrderService.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +26,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PaymentServiceFeignClient paymentServiceFeignClient;
 
-    private RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private RestTemplate restTemplate; //完成简单resful api call，不应该每次new，可以生成java bean，需要的地方再做dependency injection
 
     @Override
     public long placeOrder(OrderRequest orderRequest) { //TODO: transactions
