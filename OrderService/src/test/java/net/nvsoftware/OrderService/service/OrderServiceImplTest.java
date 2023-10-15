@@ -68,7 +68,15 @@ class OrderServiceImplTest {
         Assertions.assertNotNull(orderResponse);
         Assertions.assertEquals(orderEntity.getId(), orderResponse.getOrderId());
     }
-
+    @DisplayName("GetOrderDetailById - Failed")
+    @Test
+    void testWhenGetOrderDetailByIdFailed() {
+        Mockito.when(orderRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(null));
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class,() ->
+                orderService.getOrderDetailById(1)
+        );
+        Assertions.assertEquals("OrderService getOrderDetailById: Order Not Found with id: 1", exception.getMessage());
+    }
     // Mock Part: Add Mock Data
     private OrderResponse.PaymentResponse getMockPaymentResponse() {
         return OrderResponse.PaymentResponse.builder()
